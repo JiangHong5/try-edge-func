@@ -74,7 +74,7 @@
                 
                 resultElement.textContent = JSON.stringify(data, null, 2);
             } catch (error) {
-                resultElement.textContent = `错误: ${error.message}`;
+                resultElement.textContent = `错误: 状态码: ${error.status}, 信息: ${error.message}`;
             }
         });
     </script>
