@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Trying edge functions in Supabase</title>
+    <style>
+        .code-space {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+        code, pre, .code-space {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 14px;
+        }
+        button {
+            background-color: #3b82f6;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>这是个测试，跟Lunar测试一个东西，所以没有排版</h1>
+    <h1>这个网页可能会持续更新</h1>
+    <hr>
+    <div style="background-color: #00aaff40; padding: 16px; border-radius: 12px;">
+        <h3>最简单的function</h3>
+        <button id="call-func1">调用 hello-world 函数</button>
+        <div class="code-space">
+            <pre><code id="result-display">等待调用...</code></pre>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://fppcxzegwcabshvececw.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_eGbaAhcU3T8XUsbCNc5Ldg_-J5IDR5k';
+
+        // 创建 Supabase 客户端，变量名改为 supa
+        const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.getElementById('call-func1').addEventListener('click', async () => {
+            const resultElement = document.getElementById('result-display');
+            resultElement.textContent = '调用中...';
+            
+            try {
+                const { data, error } = await supa.functions.invoke('hello-world', {
+                    body: { name: 'Functions' },
+                });
+                
+                if (error) {
+                    throw new Error(`${error.message}`);
+                }
+                
+                resultElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultElement.textContent = `错误: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
