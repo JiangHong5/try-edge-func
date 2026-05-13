@@ -59,20 +59,23 @@
         // 创建 Supabase 客户端，变量名改为 supa
         const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        let response = null;
+        
         document.getElementById('call-func1').addEventListener('click', async () => {
             const resultElement = document.getElementById('result-display');
             resultElement.textContent = '调用中...';
             
             try {
-                const { data, error, response } = await supa.functions.invoke('hello-world', {
+                const { data, error, res } = await supa.functions.invoke('hello-world', {
                     body: {},
                     noResolveJson: true,   // 关键选项
                 });
+                response = res;
                 if (error) {
                     console.error('调用失败', error);
                 } else {
-                    console.log('状态码:', response.status);   // 例如 200, 404, 500
-                    const responseData = await response.json(); // 手动解析 JSON
+                    console.log('状态码:', res.status);   // 例如 200, 404, 500
+                    const responseData = await res.json(); // 手动解析 JSON
                     console.log(responseData);
                 }
                 
