@@ -66,8 +66,6 @@
             resultElement.textContent = '调用中...';
             
             try {
-                const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-                
                 // 调用函数
                 const { data, error } = await supabase.functions.invoke('hello-world', {
                   body: { name: 'World' },
