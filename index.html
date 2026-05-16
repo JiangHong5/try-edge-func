@@ -67,7 +67,7 @@
             
             try {
                 // 调用函数
-                const { data, error } = await supabase.functions.invoke('hello-world', {
+                const { data, error } = await supa.functions.invoke('hello-world', {
                   body: { name: 'World' },
                 })
                 if (error) {
