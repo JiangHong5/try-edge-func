@@ -46,7 +46,7 @@
     <hr>
     <div style="background-color: #00aaff40; padding: 16px; border-radius: 12px;">
         <h3>最简单的function</h3>
-        <button id="call-func1">调用 hello-world 函数</button>
+        <button id="call-func1">调用 hello-world 函数 （mmp为什么弄不了）</button>
         <div class="code-space">
             <pre><code id="result-display">等待调用...</code></pre>
         </div>
@@ -68,14 +68,12 @@
             try {
                 // 调用函数
                 const { data, error } = await supa.functions.invoke('hello-world', {
-                  body: { name: 'World' },
+                  body: {},
+                  headers: {
+                      ""
                 })
                 if (error) {
                     console.error('调用失败', error);
-                } else {
-                    console.log('状态码:', res.status);   // 例如 200, 404, 500
-                    const responseData = await res.json(); // 手动解析 JSON
-                    console.log(responseData);
                 }
                 
                 if (error) {
