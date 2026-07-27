@@ -37,6 +37,31 @@
         hr {
             margin: 20px 0;
         }
+        .warn::before {
+            content: "⚠️ ";
+        }
+        .warn {
+            border: 1px solid black;
+            background-color: yellow;
+            padding: 5px 20px;
+        }
+        .error::before {
+            content: "❌ ";
+        }
+        .error {
+            border: 1px solid black;
+            background-color: red;
+            padding: 5px 20px;
+        }
+        .info::before {
+            content: "ℹ️ ";
+        }
+        .info {
+            border: 1px solid black;
+            background-color: #70e0ff;
+            padding: 5px 20px;
+            color: white;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -46,12 +71,19 @@
     <hr>
     <div style="background-color: #00aaff40; padding: 16px; border-radius: 12px;">
         <h3>最简单的function</h3>
+        <div class="info">正在测试makeCallback函数</div>
         <button id="call-func1">调用 hello-world 函数</button>
         <div class="code-space">
-            <pre><code id="result-display">等待调用...</code></pre>
+            <pre><code id="call-func1-display">等待调用...</code></pre>
+        </div>
+        <hr>
+        <div class="warn">施工中...🚁</div>
+        <button id="call-func2">调用 hello-name 函数</button>
+        <div class="code-space">
+            <pre><code id="call-func2-display">等待调用...</code></pre>
         </div>
     </div>
-
+    
     <script>
         const SUPABASE_URL = 'https://fppcxzegwcabshvececw.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_eGbaAhcU3T8XUsbCNc5Ldg_-J5IDR5k';
@@ -60,29 +92,31 @@
         const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let response = null;
+
+        function makeCallback(destElementId, funcName, request) {
+            return async () => {
+                const resultElement = document.getElementById(destElementId);
+                resultElement.textContent = '调用中...';
+                
+                try {
+                    // 调用函数
+                    const { data, error } = await supa.functions.invoke(funcName, request);
+                    if (error) {
+                        console.error('调用失败', error);
+                    }
+                    
+                    if (error) {
+                        throw new Error(`${error.message}`);
+                    }
+                    
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    resultElement.textContent = `错误: 信息: ${error.message}`;
+                }
+            };
+        }
         
-        document.getElementById('call-func1').addEventListener('click', async () => {
-            const resultElement = document.getElementById('result-display');
-            resultElement.textContent = '调用中...';
-            
-            try {
-                // 调用函数
-                const { data, error } = await supa.functions.invoke('helloworld-', {
-                  body: {name: "JiangHong5"}}
-                )
-                if (error) {
-                    console.error('调用失败', error);
-                }
-                
-                if (error) {
-                    throw new Error(`${error.message}`);
-                }
-                
-                resultElement.textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                resultElement.textContent = `错误: 信息: ${error.message}`;
-            }
-        });
+        document.getElementById('call-func1').addEventListener('click', makeCallback("call-func1-display", "helloworld-", {body:{}}));
     </script>
 </body>
 </html>
