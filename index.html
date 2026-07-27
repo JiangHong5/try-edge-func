@@ -111,10 +111,7 @@
                     const { data, error } = await supa.functions.invoke(funcName, request);
                     if (error) {
                         console.error('调用失败', error);
-                    }
-                    
-                    if (error) {
-                        throw new Error(`${error.message}`);
+                        throw error
                     }
                     
                     resultElement.textContent = JSON.stringify(data, null, 2);
