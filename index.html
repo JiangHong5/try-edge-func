@@ -69,7 +69,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <h1>这是个测试，跟Lunar测试一个东西，所以没有排版</h1>
+    <!-- <h1>这是个测试，跟Lunar测试一个东西，所以没有排版</h1> -->
     <h1>这个网页可能会持续更新</h1>
     <hr>
     <div style="background-color: #00aaff40; padding: 16px; border-radius: 12px;">
@@ -81,6 +81,8 @@
         <hr>
         <div class="warn">施工中...🚁</div>
         <button id="call-func2">调用 hello-name 函数</button>
+        <br>
+        <input id="call-func2-input1" placeholder="输入名字" type="text"/>
         <div class="code-space">
             <pre><code id="call-func2-display">等待调用...</code></pre>
         </div>
@@ -95,11 +97,11 @@
 
         let response = null;
 
-        function makeCallback(destElementId, funcName, request) {
+        function makeCallback(destElementId, funcName, requestFunc) {
             return async () => {
                 const resultElement = document.getElementById(destElementId);
                 resultElement.textContent = '调用中...';
-                
+                const request = (requestFunc ? requestFunc() : {});
                 try {
                     // 调用函数
                     const { data, error } = await supa.functions.invoke(funcName, request);
@@ -118,7 +120,15 @@
             };
         }
         
-        document.getElementById('call-func1').addEventListener('click', makeCallback("call-func1-display", "helloworld-", {body:{}}));
+        document.getElementById('call-func1').addEventListener('click', makeCallback("call-func1-display", "helloworld-", () => {
+            return { body:{} };
+        }));
+        document.getElementById('call-func2').addEventListener('click', makeCallback("call-func2-display", "hello-name", () => {
+            const input1 = document.getElementById("call-func2-input1");
+            return {
+                body: { name: input1.value.trim() }
+            };
+        });
     </script>
 </body>
 </html>
